@@ -123,6 +123,14 @@ const authUsers = async (req, res) => {
       const isMatch = await bcrypt.compare(password, db_password);
 
       if (isMatch) {
+        const token = await userDetails.generateToken();
+        console.log(token);
+
+        res.cookie("3GAG_JWT", token, {
+          expires: new Date(Date.now() + 31556952000),
+          httpOnly: false,
+        });
+
         responder(res, 200, "success", null, "Login Successfully !");
       } else {
         responder(res, 200, "error", null, "Email or Password is incorrect !");
